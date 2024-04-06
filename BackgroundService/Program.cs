@@ -1,4 +1,3 @@
-using Amazon;
 using Amazon.DynamoDBv2;
 using BackgroundService.Services;
 using BackgroundService.Settings;
@@ -6,10 +5,12 @@ using BackgroundService.Settings;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var awsOptions = builder.Configuration.GetAWSOptions();
+builder.Services.AddDefaultAWSOptions(awsOptions);
 
 builder.Services.Configure<DynamoDbSettings>(builder.Configuration.GetSection(DynamoDbSettings.KeyName));
 
-builder.Services.AddScoped<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
+builder.Services.AddAWSService<IAmazonDynamoDB>(awsOptions);
 
 builder.Services.AddScoped<IDynamoDbService, DynamoDbService>();
 

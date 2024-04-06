@@ -21,12 +21,15 @@ namespace BackgroundService.Services
 
         public async Task<List<MyData>> GetList()
         {
+            var requestParam = new List<ScanCondition> { new ScanCondition(nameof(MyData.Id), ScanOperator.Equal, "6886b6a1-23ee-4773-ad2f-b4496f9c68ed") };
+
             var request = new QueryRequest
             {
                 TableName = dynamoDbSettings.Value.TableName,
-                KeyConditionExpression = "Id = :v_Id",
+                KeyConditionExpression = "id = :v_Id",
                 ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
-        {":v_Id", new AttributeValue { S =  "Amazon DynamoDB#DynamoDB Thread 1" }}}
+                    {":v_Id", new AttributeValue { S = "6886b6a1-23ee-4773-ad2f-b4496f9c68ed" }},
+                }
             };
 
             var response = await dynamoDB.QueryAsync(request);
