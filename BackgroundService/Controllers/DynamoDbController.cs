@@ -21,5 +21,13 @@ namespace BackgroundService.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(string id)
+        {
+            var result = await dynamoDbService.DeleteById(id);
+
+            return Ok(result);
+        }
     }
 }

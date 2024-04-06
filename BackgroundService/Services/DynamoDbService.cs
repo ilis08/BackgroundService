@@ -21,8 +21,6 @@ namespace BackgroundService.Services
 
         public async Task<List<MyData>> GetList()
         {
-            var requestParam = new List<ScanCondition> { new ScanCondition(nameof(MyData.Id), ScanOperator.Equal, "6886b6a1-23ee-4773-ad2f-b4496f9c68ed") };
-
             var request = new QueryRequest
             {
                 TableName = dynamoDbSettings.Value.TableName,
@@ -47,6 +45,19 @@ namespace BackgroundService.Services
             }
 
             return items;
+        }
+
+        public async Task<bool> DeleteById(string id)
+        {
+            var request = new DeleteItemRequest
+            {
+                TableName = dynamoDbSettings.Value.TableName,
+                Key = new Dictionary<string, AttributeValue>() { { "id", new AttributeValue { S = id } } },
+            };
+
+            var response = await dynamoDB.DeleteItemAsync(request);
+
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
     }
 }
