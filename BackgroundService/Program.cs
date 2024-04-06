@@ -1,6 +1,17 @@
+using Amazon;
+using Amazon.DynamoDBv2;
+using BackgroundService.Services;
+using BackgroundService.Settings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.Configure<DynamoDbSettings>(builder.Configuration.GetSection(DynamoDbSettings.KeyName));
+
+builder.Services.AddScoped<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
+
+builder.Services.AddScoped<IDynamoDbService, DynamoDbService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
